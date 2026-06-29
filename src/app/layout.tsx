@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   applicationName: siteConfig.name,
   keywords: siteConfig.keywords,
   manifest: "/manifest.webmanifest",
+  verification: {
+    google: "-jaHooQRnWLsLpAmnX-BVkFkbWZNEV7Hc3tb-CRTPqI"
+  },
   icons: {
     icon: [
       { url: "/favicon.png", type: "image/png", sizes: "96x96" },
