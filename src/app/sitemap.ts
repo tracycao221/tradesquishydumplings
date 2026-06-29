@@ -15,8 +15,6 @@ const routes: Array<{
   { path: "/trello", changeFrequency: "weekly", priority: 0.72 },
   { path: "/calculator", changeFrequency: "weekly", priority: 0.85 },
   { path: "/trading/fair-trade-calculator", changeFrequency: "weekly", priority: 0.9 },
-  { path: "/squad-planner", changeFrequency: "weekly", priority: 0.9 },
-  { path: "/resource-calculator", changeFrequency: "weekly", priority: 0.9 },
   { path: "/guides", changeFrequency: "weekly", priority: 0.8 },
   { path: "/guides/how-to-trade", changeFrequency: "weekly", priority: 0.82 },
   { path: "/guides/scam-protection", changeFrequency: "weekly", priority: 0.82 },
