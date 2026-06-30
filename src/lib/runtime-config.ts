@@ -2,6 +2,9 @@ function readEnv(value: string | undefined): string | undefined {
   return value && value.trim().length > 0 ? value : undefined;
 }
 
+const defaultAdsterraSocialBarScriptUrl =
+  "https://pl30138413.effectivecpmnetwork.com/8c/18/c6/8c18c6bc208d69a9af6900aee9327260.js";
+
 export const runtimeConfig = {
   adsenseClientId: readEnv(process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID),
   adsterraBannerId: readEnv(process.env.NEXT_PUBLIC_ADSTERRA_BANNER_ID),
@@ -22,5 +25,7 @@ export const runtimeConfig = {
   adsterraLeaderboardId: readEnv(process.env.NEXT_PUBLIC_ADSTERRA_LEADERBOARD_ID),
   adsterraSmartLinkUrl: readEnv(process.env.NEXT_PUBLIC_ADSTERRA_SMARTLINK_URL),
   adsterraPopunderScriptUrl: readEnv(process.env.NEXT_PUBLIC_ADSTERRA_POPUNDER_SCRIPT_URL),
+  adsterraSocialBarScriptUrl:
+    readEnv(process.env.NEXT_PUBLIC_ADSTERRA_SOCIAL_BAR_SCRIPT_URL) || defaultAdsterraSocialBarScriptUrl,
   analyticsId: readEnv(process.env.NEXT_PUBLIC_ANALYTICS_ID)
 };
