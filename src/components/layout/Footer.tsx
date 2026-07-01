@@ -14,10 +14,11 @@ export function Footer() {
             <h3 className="text-sm font-bold text-white">Core pages</h3>
             <div className="mt-3 grid gap-2 text-sm text-white/62">
               <Link href="/codes" className="hover:text-white">Codes</Link>
+              <Link href="/wiki/trading/value-list" className="hover:text-white">Value List</Link>
               <Link href="/tier-list" className="hover:text-white">Tier List</Link>
               <Link href="/trello" className="hover:text-white">Trello/Discord</Link>
-              <Link href="/calculator" className="hover:text-white">Calculator</Link>
-              <Link href="/guides" className="hover:text-white">Guides</Link>
+              <Link href="/calculator" className="hover:text-white">Trade Calculator</Link>
+              <Link href="/guides" className="hover:text-white">Trading Guides</Link>
             </div>
           </div>
           <div>

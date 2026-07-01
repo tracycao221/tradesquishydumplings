@@ -18,11 +18,11 @@ import { SectionHeader, TrustNote } from "@/components/ui/content";
 import { BrandHero } from "@/components/home/BrandHero";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.gameName} Wiki, Codes, Tier List and Tools`,
+  title: `${siteConfig.gameName} Codes, Values, Calculator & Tier List`,
   description: siteConfig.description,
   alternates: { canonical: siteConfig.domain },
   openGraph: {
-    title: `${siteConfig.gameName} Wiki, Codes and Tools`,
+    title: `${siteConfig.gameName} Codes, Values, Calculator & Tier List`,
     description: siteConfig.description,
     url: siteConfig.domain,
     type: "website",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.gameName} Wiki, Codes and Tools`,
+    title: `${siteConfig.gameName} Codes, Values, Calculator & Tier List`,
     description: siteConfig.description,
     images: ["/opengraph-image"]
   }
@@ -62,7 +62,7 @@ export default function HomePage() {
           <SectionHeader
             eyebrow="Freshness center"
             title={`${siteConfig.gameName} codes and update status`}
-            copy="Codes are the highest-repeat Roblox search intent, so the homepage surfaces the latest verified set and sends players into the dedicated codes page."
+            copy="Start here for Trade Squishy Dumplings codes, then open the dedicated codes page for reward notes, redeem help, and source confidence."
           />
           <Link className="button-secondary" href="/codes">
             View all codes
@@ -107,8 +107,8 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-12">
         <SectionHeader
           eyebrow="Core tools"
-          title="Tools players can use immediately"
-          copy="Start with codes, tier list, calculator, and source checks before spending rare resources or committing to a build."
+          title="Codes, values, calculator, and tier list"
+          copy="Start with codes, value list notes, the trade calculator, and tier list checks before spending rare resources or accepting a Roblox trade."
         />
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {toolCards.map((tool) => (
@@ -126,12 +126,12 @@ export default function HomePage() {
           <div>
             <SectionHeader
               eyebrow="Guides"
-              title="Pick the next problem to solve"
-              copy="Use these guides when you need beginner advice, safer upgrade choices, farming routes, or advanced strategy."
+              title={`${siteConfig.gameName} trading guide hub`}
+              copy="Use these guides when you need beginner advice, trading-board steps, value checks, safer upgrade choices, or advanced strategy."
             />
-            <div className="mt-6 grid gap-3">
-              {guideClusters.map((guide) => (
-                <Link key={guide.href} href={guide.href} className="row-link">
+        <div className="mt-6 grid gap-3">
+          {guideClusters.map((guide) => (
+            <Link key={guide.href} href={guide.href} className="row-link">
                   <span>
                     <strong>{guide.title}</strong>
                     <small>{guide.description}</small>
@@ -144,12 +144,12 @@ export default function HomePage() {
           <div>
             <SectionHeader
               eyebrow="Wiki coverage"
-              title="Entity pages for Roblox search demand"
-              copy="Characters, items, maps, clans, units, codes, and puzzle pages should be split into wiki entities when research confirms them."
+              title={`${siteConfig.gameName} wiki and value list`}
+              copy="Use the wiki hub for values, codes support, trading notes, and source-checked Roblox details while entity data is still being verified."
             />
-            <div className="mt-6 grid gap-3">
-              {wikiCards.map((item) => (
-                <Link key={item.href} href={item.href} className="row-link">
+        <div className="mt-6 grid gap-3">
+          {wikiCards.map((item) => (
+            <Link key={item.href} href={item.href} className="row-link">
                   <span>
                     <strong>{item.title}</strong>
                     <small>{item.description}</small>
@@ -218,8 +218,8 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-12">
         <SectionHeader
           eyebrow="FAQ"
-          title={`${siteConfig.gameName} quick answers`}
-          copy="Quick answers for codes, sources, rankings, and the next page to check."
+          title={`${siteConfig.gameName} codes, values, and tier list FAQ`}
+          copy="Quick answers for codes, value list checks, calculator use, rankings, and the next page to open."
         />
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {faqs.home.map((faq) => (

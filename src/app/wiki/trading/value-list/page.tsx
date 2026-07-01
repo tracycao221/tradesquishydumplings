@@ -31,8 +31,8 @@ const valueRows = [
 ];
 
 export const metadata: Metadata = {
-  title: `${siteConfig.gameName} Value List (June 2026) - Trading Values`,
-  description: `Use estimated ${siteConfig.gameName} trading values, demand labels, and confidence notes before making a dumpling trade.`,
+  title: `${siteConfig.gameName} Value List - Trading Values & Demand`,
+  description: `Check estimated ${siteConfig.gameName} values, demand labels, confidence notes, and calculator links before making a dumpling trade.`,
   alternates: { canonical: `${siteConfig.domain}/wiki/trading/value-list` }
 };
 
@@ -44,11 +44,11 @@ export default function ValueListPage() {
       <PageIntro
         eyebrow="Trading values"
         title={`${siteConfig.gameName} Value List`}
-        description="Compare dumpling demand and estimated trade value with clear confidence notes. Community values can move quickly, so treat this as a decision aid, not an official price list."
+        description="Compare dumpling demand and estimated trading value with clear confidence notes. Community values can move quickly, so treat this as a decision aid, not an official price list."
       />
 
       <section className="mt-10 content-card">
-        <SectionHeader eyebrow="Value table" title="Starter value framework" />
+        <SectionHeader eyebrow="Value table" title={`${siteConfig.gameName} trading values framework`} />
         <div className="mt-6 overflow-x-auto">
           <table className="w-full min-w-[760px] border-separate border-spacing-y-2 text-left text-sm">
             <thead className="text-white/60">
@@ -80,7 +80,7 @@ export default function ValueListPage() {
       <section className="mt-8 grid gap-5 md:grid-cols-3">
         <div className="content-card">
           <h2 className="text-xl font-black text-white">Before accepting</h2>
-          <p className="mt-3 text-sm leading-6 text-white/65">Check both sides in the fair trade calculator and cancel if an item changes at the last second.</p>
+          <p className="mt-3 text-sm leading-6 text-white/65">Check both sides in the Trade Squishy Dumplings trade calculator and cancel if an item changes at the last second.</p>
         </div>
         <div className="content-card">
           <h2 className="text-xl font-black text-white">Confidence labels</h2>

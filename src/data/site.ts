@@ -5,11 +5,11 @@ export const siteConfig: SiteConfig = {
   name: `${gameConfig.name} Wiki`,
   domain: gameConfig.domain,
   gameName: gameConfig.name,
-  description: `${gameConfig.name} wiki with active codes, tier list rankings, Trello and Discord status, fair-trade tools, guides, and source-backed Roblox trading help.`,
-  valueProposition: `Track active ${gameConfig.name} codes, compare dumpling values, and check trades before you accept in Roblox.`,
+  description: `${gameConfig.name} codes, value list, trade calculator, trading guide, tier list, and wiki notes for source-checked Roblox trading help.`,
+  valueProposition: `Find ${gameConfig.name} codes, compare values, use the trade calculator, and check the tier list before you accept in Roblox.`,
   shortDisclosure: `${gameConfig.name} Wiki is an unofficial fan-made resource. Roblox and the game creators remain the source of record for official support and updates.`,
-  lastUpdated: "2026-06-10",
-  freshnessLabel: "codes, tier list, and guides ready for verification",
+  lastUpdated: "2026-07-01",
+  freshnessLabel: "rechecked on 2026-07-01 after competitor sitemap expansion, Creator Exchange Discord-status review, and the July 4 Roblox event surface",
   keywords: [
     `${gameConfig.name}`,
     `${gameConfig.name} codes`,
@@ -68,24 +68,32 @@ export const siteConfig: SiteConfig = {
 };
 
 export const heroActions = [
-  { href: "/codes", label: "Get codes" },
-  { href: "/tier-list", label: "View tier list" },
+  { href: "/codes", label: "Check codes" },
+  { href: "/wiki/trading/value-list", label: "View values" },
   { href: "/trello", label: "Check sources" },
-  { href: "/trading/fair-trade-calculator", label: "Check a trade" }
+  { href: "/trading/fair-trade-calculator", label: "Use calculator" }
 ] as const;
 
 export const heroMetrics: HeroMetric[] = [
   { label: "Code status", value: "Live", note: "Designed for frequent checks" },
-  { label: "Core pages", value: "10", note: "Codes, tier list, Trello, tools, guides, wiki" },
+  { label: "Core pages", value: "12", note: "Codes, redeem help, tier list, guides, wiki, tools" },
   { label: "Source notes", value: "Clear", note: "Official, community, and needs-check labels" },
-  { label: "Source model", value: "Clear", note: "Official and community links split" }
+  { label: "Discord status", value: "Partial", note: "Guild name seen, public invite still unverified" }
 ];
 
 export const activeCodes: GameCode[] = [
-  { code: "UPDATE", reward: `Starter ${gameConfig.currency.name} or boost reward`, status: "Needs check", addedDate: "Verify before launch" },
-  { code: "RELEASE", reward: "Launch reward placeholder", status: "Needs check", addedDate: "Verify before launch" },
-  { code: "WELCOME", reward: "New player reward placeholder", status: "Needs check", addedDate: "Verify before launch" },
-  { code: "THANKS", reward: "Community reward placeholder", status: "Needs check", addedDate: "Verify before launch" }
+  {
+    code: "GLITTERDUMPLING",
+    reward: "Reported reward: 2 all dumplings / 2 of every dumpling. Roblox Den, Earnaldo, and Creator Exchange still repeat the same reward pair, but no creator-owned source has confirmed it.",
+    status: "Needs check",
+    addedDate: "Conflict rechecked 2026-06-30"
+  },
+  {
+    code: "BABAFINGO",
+    reward: "Reported reward: 1 all dumpling / 1 of every dumpling. Roblox Den, Earnaldo, and Creator Exchange still repeat the same reward pair, but no creator-owned source has confirmed it.",
+    status: "Needs check",
+    addedDate: "Conflict rechecked 2026-06-30"
+  }
 ];
 
 export const tierPreview: TierPreviewItem[] = [
@@ -123,7 +131,7 @@ export const tierPreview: TierPreviewItem[] = [
 
 export const toolCards: LinkCard[] = [
   {
-    title: `${gameConfig.name} Fair Trade Checker`,
+    title: `${gameConfig.name} Trade Calculator`,
     href: "/trading/fair-trade-calculator",
     eyebrow: "Primary tool",
     description: "Compare estimated dumpling values, demand, and trend before accepting a board trade."
@@ -132,13 +140,13 @@ export const toolCards: LinkCard[] = [
     title: `${gameConfig.name} Tier List`,
     href: "/tier-list",
     eyebrow: "Rankings",
-    description: "Ranks the current best picks with notes for beginners, farming, and late-game use."
+    description: "Review tier list notes for beginners, farming, and late-game use without treating unverified picks as final."
   },
   {
     title: `${gameConfig.name} Codes`,
     href: "/codes",
     eyebrow: "Codes",
-    description: "Tracks active codes, expired-code conflicts, and redemption instructions."
+    description: "Tracks reported active codes, source notes, and redemption instructions."
   },
   {
     title: `${gameConfig.name} Trello & Discord`,
@@ -151,36 +159,36 @@ export const toolCards: LinkCard[] = [
 export const guideClusters: LinkCard[] = [
   {
     title: "Beginner guide",
-    href: "/guides",
+    href: "/guides/how-to-play",
     eyebrow: "Guide",
-    description: "First-session path, mistakes to avoid, and what to unlock first."
+    description: "First-session path, trading-board basics, and where the official description matches live community guidance."
   },
   {
-    title: "Progression guide",
-    href: "/guides",
+    title: `${gameConfig.name} Trading Guide`,
+    href: "/guides/how-to-trade",
     eyebrow: "Guide",
-    description: "Mid-game priorities, resource planning, and farming routes."
+    description: "Trading board flow, accept timing, and when to compare values before you lock a trade."
   },
   {
-    title: "Advanced strategy",
-    href: "/guides",
+    title: "Scam protection",
+    href: "/guides/scam-protection",
     eyebrow: "Guide",
-    description: "Late-game builds, boss prep, meta choices, or trading decisions."
+    description: "Last-second swap checks, cancel habits, and safe ways to handle uneven offers."
   }
 ];
 
 export const wikiCards: LinkCard[] = [
   {
-    title: "Dumpling values",
+    title: `${gameConfig.name} Value List`,
     href: "/wiki/trading/value-list",
     eyebrow: "Trading",
-    description: "Check estimated value groups, demand notes, and confidence labels before trading."
+    description: "Check estimated trading values, demand notes, and confidence labels before using the calculator."
   },
   {
-    title: "Trading board basics",
-    href: "/guides",
+    title: "How to redeem codes",
+    href: "/codes/how-to-redeem",
     eyebrow: "Guide",
-    description: "Learn how board trades work, when to cancel, and why both players need to accept."
+    description: "Use the current public UI evidence before you search through menus or trust stale redeem instructions."
   },
   {
     title: "Dumpling list pending",
@@ -198,10 +206,10 @@ export const officialLinks: LinkCard[] = [
     description: "Use this page as the source of record for game title, creator, and live Roblox availability."
   },
   {
-    title: "Trello, Discord, and board status",
+    title: "Discord and board status",
     href: gameConfig.dataSources.trello && gameConfig.dataSources.trello !== "#" ? gameConfig.dataSources.trello : (gameConfig.dataSources.discord && gameConfig.dataSources.discord !== "#" ? gameConfig.dataSources.discord : "/trello"),
     eyebrow: "Community",
-    description: "Use this status route or verified creator links to separate official boards from community references."
+    description: "Use the status route to separate the visible Creator Exchange guild-name signal from any verified creator-owned invite or board."
   },
   {
     title: "Source checklist",
@@ -228,22 +236,25 @@ export const editorialSignals: EditorialSignal[] = [
 
 export const videoGuides: LinkCard[] = [
   {
-    title: "Gameplay overview",
-    href: "#",
+    title: "How to play overview",
+    href: "https://www.youtube.com/watch?v=8H7g2Y1wEmQ",
     eyebrow: "Video",
-    description: "Use a current YouTube creator guide that explains the game loop and shows real gameplay."
+    source: "YouTube",
+    description: "Recent YouTube search coverage for exact how-to-play intent supports a dedicated beginner route."
   },
   {
-    title: "Beginner route",
-    href: "#",
+    title: "Codes checks",
+    href: "https://www.youtube.com/watch?v=F7PhQg5H-C0",
     eyebrow: "Video",
-    description: "Use a recent YouTube walkthrough for the first session or first major unlock."
+    source: "YouTube",
+    description: "Recent code-focused video results reinforce that codes remain the main freshness query family."
   },
   {
-    title: "Meta showcase",
-    href: "#",
+    title: "Discord join intent",
+    href: "https://www.youtube.com/watch?v=ulFKK6Wr9a0",
     eyebrow: "Video",
-    description: "Use a YouTube video that supports rankings, builds, update context, or advanced strategy."
+    source: "YouTube",
+    description: "Players are searching for Discord access, but the public invite still needs creator-owned verification before linking directly."
   }
 ];
 
@@ -251,7 +262,7 @@ export const faqs: Record<"home" | "codes" | "tierList" | "calculator", FaqItem[
   home: [
     {
       q: `What is ${gameConfig.name} Wiki?`,
-      a: `${gameConfig.name} Wiki is a fan-made Roblox resource for codes, tier lists, fair-trade checks, guides, and source-backed trading help.`
+      a: `${gameConfig.name} Wiki is a fan-made Roblox resource for codes, value list checks, the trade calculator, tier list notes, guides, and source-backed trading help.`
     },
     {
       q: `Is this the official ${gameConfig.name} website?`,
@@ -259,11 +270,11 @@ export const faqs: Record<"home" | "codes" | "tierList" | "calculator", FaqItem[
     },
     {
       q: `How often should ${gameConfig.name} codes be checked?`,
-      a: "Codes should be checked whenever the game updates, reaches milestones, or community sources report new rewards. Keep the checked date visible."
+      a: "Codes should be checked whenever the game updates, reaches milestones, or community sources report new rewards. Keep the checked date visible and keep unverified rewards clearly labelled."
     },
     {
-      q: `What pages should be expanded first?`,
-      a: "Start with codes, tier list, Trello/Discord status, fair-trade checker, beginner guide, wiki hub, and sources. Add entity pages after research confirms the game's real systems."
+      q: `Where are ${gameConfig.name} values, calculator, and tier list pages?`,
+      a: "Start with the codes page, value list, fair-trade calculator, trading guide, wiki hub, and tier list. Add entity pages only after dumpling names and systems are source-backed."
     }
   ],
   codes: [
@@ -272,20 +283,20 @@ export const faqs: Record<"home" | "codes" | "tierList" | "calculator", FaqItem[
       a: "Use official Roblox descriptions, creator groups, Discord announcements, Trello boards, and trusted community trackers when available."
     },
     {
-      q: "Why are some codes marked Needs check?",
-      a: "Uncertain rewards stay clearly labeled so the page does not overstate verification."
+      q: `Are these ${gameConfig.name} codes official?`,
+      a: "This label means public sources disagree or no first-party code post was verified, so the page does not overstate what is active versus expired."
     }
   ],
   tierList: [
     {
-      q: "How should the tier list be updated?",
-      a: "Replace placeholder tiers with research-backed rankings, explain use cases, and split beginner, farming, and endgame recommendations when needed."
+      q: `How should the ${gameConfig.name} tier list be used?`,
+      a: "Use the tier list as a research checklist until stronger source-backed rankings are available. Compare beginner, farming, and endgame use cases before treating a pick as final."
     }
   ],
   calculator: [
     {
-      q: "Is the trade checker exact?",
-      a: "The trade checker uses estimated values and demand signals. Treat it as a warning system, not an official price list."
+      q: `Is the ${gameConfig.name} trade calculator exact?`,
+      a: "The trade calculator uses estimated values and demand signals. Treat it as a warning system, not an official price list."
     }
   ]
 };

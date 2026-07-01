@@ -5,8 +5,8 @@ import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs, PageIntro, SectionHeader } from "@/components/ui/content";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.gameName} Guides`,
-  description: `Beginner, progression, and advanced strategy guides for ${siteConfig.gameName}.`,
+  title: `${siteConfig.gameName} Trading Guide, Beginner Help & Value Checks`,
+  description: `Use ${siteConfig.gameName} guides for trading-board steps, beginner help, value checks, calculator links, and source-safe Roblox decisions.`,
   alternates: { canonical: `${siteConfig.domain}/guides` }
 };
 
@@ -17,15 +17,15 @@ export default function GuidesPage() {
       <Breadcrumbs items={[{ label: "Guides", href: "/guides" }]} />
       <PageIntro
         eyebrow="Guide hub"
-        title={`${siteConfig.gameName} Guides`}
-        description="Use this hub for beginner help, farming routes, boss prep, event notes, and advanced strategy."
+        title={`${siteConfig.gameName} Trading Guide Hub`}
+        description="Use this hub for trading-board steps, beginner help, value checks, calculator links, farming routes, and source-safe strategy."
       />
 
       <section className="mt-10">
         <SectionHeader
           eyebrow="Recommended guides"
-          title="Start with pages that match real player questions"
-          copy="Pick the guide that matches your current problem, then check codes, rankings, calculator notes, or wiki details before spending rare resources."
+          title="Start with trading, values, and beginner questions"
+          copy="Pick the guide that matches your current problem, then check codes, value list notes, calculator results, tier list context, or wiki details before spending rare resources."
         />
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {guideClusters.map((guide) => (

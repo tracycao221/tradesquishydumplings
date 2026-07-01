@@ -5,8 +5,8 @@ import { BreadcrumbJsonLd, FaqJsonLd, SoftwareApplicationJsonLd } from "@/compon
 import { Breadcrumbs, PageIntro } from "@/components/ui/content";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.gameName} Fair Trade Calculator`,
-  description: `Use the ${siteConfig.gameName} fair trade calculator to compare estimated dumpling values before you accept a board trade.`,
+  title: `${siteConfig.gameName} Trade Calculator - Check Values Before Trading`,
+  description: `Use the ${siteConfig.gameName} trade calculator to compare estimated dumpling values, demand, and trend before accepting a Roblox trade.`,
   alternates: { canonical: `${siteConfig.domain}/calculator` }
 };
 
@@ -19,7 +19,7 @@ export default function CalculatorPage() {
       <Breadcrumbs items={[{ label: "Calculator", href: "/calculator" }]} />
       <PageIntro
         eyebrow="Primary tool"
-        title={`${siteConfig.gameName} Fair Trade Calculator`}
+        title={`${siteConfig.gameName} Trade Calculator`}
         description="Compare both sides of a dumpling trade with estimated value, demand, and trend adjustments before both players accept."
       />
       <section className="mt-10">

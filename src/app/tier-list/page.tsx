@@ -5,19 +5,19 @@ import { BreadcrumbJsonLd, FaqJsonLd, ItemListJsonLd } from "@/components/seo/Js
 import { Breadcrumbs, PageIntro, SectionHeader } from "@/components/ui/content";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.gameName} Tier List`,
-  description: `Best ${siteConfig.gameName} picks ranked for beginners, farming, and late-game progression.`,
+  title: `${siteConfig.gameName} Tier List - Best Picks & Value Notes`,
+  description: `Check the ${siteConfig.gameName} tier list for best-pick notes, value context, beginner use cases, farming, and late-game trade decisions.`,
   alternates: { canonical: `${siteConfig.domain}/tier-list` },
   openGraph: {
-    title: `${siteConfig.gameName} Tier List`,
-    description: `Best ${siteConfig.gameName} picks ranked for beginners, farming, and late-game progression.`,
+    title: `${siteConfig.gameName} Tier List - Best Picks & Value Notes`,
+    description: `Check the ${siteConfig.gameName} tier list for best-pick notes, value context, beginner use cases, farming, and late-game trade decisions.`,
     url: `${siteConfig.domain}/tier-list`,
     images: ["/opengraph-image"]
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.gameName} Tier List`,
-    description: `Best ${siteConfig.gameName} picks ranked for beginners, farming, and late-game progression.`,
+    title: `${siteConfig.gameName} Tier List - Best Picks & Value Notes`,
+    description: `Check the ${siteConfig.gameName} tier list for best-pick notes, value context, beginner use cases, farming, and late-game trade decisions.`,
     images: ["/opengraph-image"]
   }
 };
@@ -57,8 +57,8 @@ export default function TierListPage() {
       <section className="mt-10">
         <SectionHeader
           eyebrow="Rankings"
-          title="Best current picks"
-          copy="Compare strong beginner, farming, team-combo, and late-game options with clear notes about when each pick is useful."
+          title={`${siteConfig.gameName} best picks and tier notes`}
+          copy="Compare beginner, farming, team-combo, and late-game options with clear notes about when each pick is useful and what still needs source checking."
         />
         <div className="mt-6 grid gap-4">
           {tierPreview.map((item) => (
@@ -128,7 +128,7 @@ export default function TierListPage() {
 
       <div className="mt-10 flex flex-wrap gap-3">
         <Link href="/codes" className="button-secondary">Get codes</Link>
-        <Link href="/calculator" className="button-secondary">Use the calculator</Link>
+        <Link href="/calculator" className="button-secondary">Use trade calculator</Link>
         <Link href="/trello" className="button-secondary">Check source status</Link>
       </div>
     </main>
