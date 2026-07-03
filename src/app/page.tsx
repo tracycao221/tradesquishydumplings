@@ -18,11 +18,11 @@ import { SectionHeader, TrustNote } from "@/components/ui/content";
 import { BrandHero } from "@/components/home/BrandHero";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.gameName} Codes, Values, Calculator & Tier List`,
+  title: `${siteConfig.gameName} Codes, Value List & Trade Calculator`,
   description: siteConfig.description,
   alternates: { canonical: siteConfig.domain },
   openGraph: {
-    title: `${siteConfig.gameName} Codes, Values, Calculator & Tier List`,
+    title: `${siteConfig.gameName} Codes, Value List & Trade Calculator`,
     description: siteConfig.description,
     url: siteConfig.domain,
     type: "website",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.gameName} Codes, Values, Calculator & Tier List`,
+    title: `${siteConfig.gameName} Codes, Value List & Trade Calculator`,
     description: siteConfig.description,
     images: ["/opengraph-image"]
   }
@@ -61,11 +61,11 @@ export default function HomePage() {
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <SectionHeader
             eyebrow="Freshness center"
-            title={`${siteConfig.gameName} codes and update status`}
-            copy="Start here for Trade Squishy Dumplings codes, then open the dedicated codes page for reward notes, redeem help, and source confidence."
+            title={`${siteConfig.gameName} codes, values, and trade checks`}
+            copy="Start with the reported codes list, then compare dumpling values and open the trade calculator before you accept a Roblox trade."
           />
           <Link className="button-secondary" href="/codes">
-            View all codes
+            Check reported codes
           </Link>
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -107,8 +107,8 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-12">
         <SectionHeader
           eyebrow="Core tools"
-          title="Codes, values, calculator, and tier list"
-          copy="Start with codes, value list notes, the trade calculator, and tier list checks before spending rare resources or accepting a Roblox trade."
+          title="Codes, value list, calculator, and trading guide"
+          copy="Use the source-labelled codes page, value list, trade calculator, and trading guide before spending rare resources or locking a trade."
         />
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {toolCards.map((tool) => (
@@ -126,8 +126,8 @@ export default function HomePage() {
           <div>
             <SectionHeader
               eyebrow="Guides"
-              title={`${siteConfig.gameName} trading guide hub`}
-              copy="Use these guides when you need beginner advice, trading-board steps, value checks, safer upgrade choices, or advanced strategy."
+              title={`${siteConfig.gameName} trading guide and value checks`}
+              copy="Use these guides when you need trading-board steps, value checks, safer accept habits, or a quick source check."
             />
         <div className="mt-6 grid gap-3">
           {guideClusters.map((guide) => (
@@ -144,8 +144,8 @@ export default function HomePage() {
           <div>
             <SectionHeader
               eyebrow="Wiki coverage"
-              title={`${siteConfig.gameName} wiki and value list`}
-              copy="Use the wiki hub for values, codes support, trading notes, and source-checked Roblox details while entity data is still being verified."
+              title={`${siteConfig.gameName} wiki, values, and codes support`}
+              copy="Use the wiki hub for value-list notes, codes support, trading safety, and source-checked Roblox details while entity data is still being verified."
             />
         <div className="mt-6 grid gap-3">
           {wikiCards.map((item) => (

@@ -5,11 +5,11 @@ export const siteConfig: SiteConfig = {
   name: `${gameConfig.name} Wiki`,
   domain: gameConfig.domain,
   gameName: gameConfig.name,
-  description: `${gameConfig.name} codes, value list, trade calculator, trading guide, tier list, and wiki notes for source-checked Roblox trading help.`,
-  valueProposition: `Find ${gameConfig.name} codes, compare values, use the trade calculator, and check the tier list before you accept in Roblox.`,
+  description: `${gameConfig.name} codes, value list, trade calculator, trading guide, wiki notes, and safe Roblox source checks before you accept a trade.`,
+  valueProposition: `Check ${gameConfig.name} codes first, compare dumpling values, then use the trade calculator and wiki notes before you accept a Roblox trade.`,
   shortDisclosure: `${gameConfig.name} Wiki is an unofficial fan-made resource. Roblox and the game creators remain the source of record for official support and updates.`,
-  lastUpdated: "2026-07-01",
-  freshnessLabel: "rechecked on 2026-07-01 after competitor sitemap expansion, Creator Exchange Discord-status review, and the July 4 Roblox event surface",
+  lastUpdated: "2026-07-03",
+  freshnessLabel: "CTR refresh for codes, values, trading guide, wiki, and calculator paths",
   keywords: [
     `${gameConfig.name}`,
     `${gameConfig.name} codes`,
@@ -68,10 +68,10 @@ export const siteConfig: SiteConfig = {
 };
 
 export const heroActions = [
-  { href: "/codes", label: "Check codes" },
-  { href: "/wiki/trading/value-list", label: "View values" },
-  { href: "/trello", label: "Check sources" },
-  { href: "/trading/fair-trade-calculator", label: "Use calculator" }
+  { href: "/codes", label: "Check codes first" },
+  { href: "/wiki/trading/value-list", label: "Compare values" },
+  { href: "/trading/fair-trade-calculator", label: "Use trade calculator" },
+  { href: "/guides", label: "Open trading guide" }
 ] as const;
 
 export const heroMetrics: HeroMetric[] = [

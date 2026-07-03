@@ -5,8 +5,8 @@ import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs, PageIntro, SectionHeader } from "@/components/ui/content";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.gameName} Wiki - Values, Codes, Trading & Guides`,
-  description: `${siteConfig.gameName} wiki hub for values, codes support, trading boards, calculator notes, tier list context, and source-checked Roblox details.`,
+  title: `${siteConfig.gameName} Wiki - Value List, Codes & Trading Help`,
+  description: `${siteConfig.gameName} wiki hub for the value list, codes support, trading boards, calculator notes, tier list context, and source-checked Roblox details.`,
   alternates: { canonical: `${siteConfig.domain}/wiki` }
 };
 
@@ -17,14 +17,14 @@ export default function WikiPage() {
       <Breadcrumbs items={[{ label: "Wiki", href: "/wiki" }]} />
       <PageIntro
         eyebrow="Wiki hub"
-        title={`${siteConfig.gameName} Wiki`}
+        title={`${siteConfig.gameName} Wiki - Value List, Codes & Trading Help`}
         description="Use this hub for value list notes, codes support, trade safety, calculator help, and source-checked game details. Individual dumpling pages will be added after the entity list is verified."
       />
 
       <section className="mt-10">
         <SectionHeader
           eyebrow="Game topics"
-          title="Choose values, codes, or trading help"
+          title="Choose value list, codes, or trading help"
           copy="Start with the wiki topics that affect your next code check, value comparison, trade, upgrade, build, or route decision."
         />
         <div className="mt-6 grid gap-4 md:grid-cols-3">

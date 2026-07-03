@@ -5,19 +5,19 @@ import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs, PageIntro, SectionHeader } from "@/components/ui/content";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.gameName} Codes - Rewards, Redeem Help & Updates`,
-  description: `Check ${siteConfig.gameName} codes, reported rewards, redeem steps, update status, and source confidence before you claim in Roblox.`,
+  title: `${siteConfig.gameName} Codes - Reported Rewards & Redeem Help`,
+  description: `Check ${siteConfig.gameName} codes, reported rewards, redeem steps, source confidence, and trade links before you claim in Roblox.`,
   alternates: { canonical: `${siteConfig.domain}/codes` },
   openGraph: {
-    title: `${siteConfig.gameName} Codes - Rewards, Redeem Help & Updates`,
-    description: `Check ${siteConfig.gameName} codes, reported rewards, redeem steps, update status, and source confidence before you claim in Roblox.`,
+    title: `${siteConfig.gameName} Codes - Reported Rewards & Redeem Help`,
+    description: `Check ${siteConfig.gameName} codes, reported rewards, redeem steps, source confidence, and trade links before you claim in Roblox.`,
     url: `${siteConfig.domain}/codes`,
     images: ["/opengraph-image"]
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.gameName} Codes - Rewards, Redeem Help & Updates`,
-    description: `Check ${siteConfig.gameName} codes, reported rewards, redeem steps, update status, and source confidence before you claim in Roblox.`,
+    title: `${siteConfig.gameName} Codes - Reported Rewards & Redeem Help`,
+    description: `Check ${siteConfig.gameName} codes, reported rewards, redeem steps, source confidence, and trade links before you claim in Roblox.`,
     images: ["/opengraph-image"]
   }
 };
@@ -31,14 +31,14 @@ export default function CodesPage() {
 
       <PageIntro
         eyebrow="Freshness-sensitive"
-        title={`${siteConfig.gameName} Codes`}
-        description="Use this page as the canonical codes surface. Current entries were rechecked on July 1, 2026, and public trackers still repeat the same two code names without a creator-posted code list to verify them."
+        title={`${siteConfig.gameName} Codes - Reported Rewards & Redeem Help`}
+        description="Use this page as the canonical codes surface before trading. Public trackers still repeat the same two code names without a creator-posted code list, so keep rewards source-labelled and verify in game."
       />
 
       <section className="mt-10">
         <SectionHeader
           eyebrow="Active list"
-          title={`${siteConfig.gameName} active codes list`}
+          title={`${siteConfig.gameName} reported active codes list`}
           copy="These are still the only repeated public code names across Roblox Den, Earnaldo, and Creator Exchange. Treat them as reported active codes rather than creator-verified rewards until an official game or creator source publishes them or you test them live."
         />
         <div className="mt-6 grid gap-4 md:grid-cols-2">
