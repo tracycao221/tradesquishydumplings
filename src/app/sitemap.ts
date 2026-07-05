@@ -21,16 +21,23 @@ const routes: Array<{
   { path: "/wiki", changeFrequency: "weekly", priority: 0.8 },
   { path: "/updates", changeFrequency: "daily", priority: 0.75 },
   { path: "/sources", changeFrequency: "monthly", priority: 0.5 },
+  { path: "/about", changeFrequency: "monthly", priority: 0.4 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.3 },
   { path: "/privacy", changeFrequency: "monthly", priority: 0.3 },
+  { path: "/terms", changeFrequency: "monthly", priority: 0.3 },
   { path: "/disclosure", changeFrequency: "monthly", priority: 0.3 }
 ];
+
+function canonicalUrl(path: string) {
+  const normalizedPath = path === "" || path === "/" ? "/" : `${path.replace(/\/$/, "")}/`;
+  return `${siteConfig.domain}${normalizedPath}`;
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const seen = new Set<string>();
   return routes
     .map((route) => ({
-      url: `${siteConfig.domain}${route.path}`,
+      url: canonicalUrl(route.path),
       lastModified: new Date(),
       changeFrequency: route.changeFrequency,
       priority: route.priority
