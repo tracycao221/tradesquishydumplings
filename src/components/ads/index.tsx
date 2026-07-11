@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { runtimeConfig } from "@/lib/runtime-config";
 
-type BannerSize = "300x250" | "320x50" | "728x90";
+type BannerSize = "160x300" | "160x600" | "300x250" | "320x50" | "468x60" | "728x90";
 
 type BannerConfig = {
   height: number;
@@ -13,6 +13,18 @@ type BannerConfig = {
 };
 
 const bannerConfigs: Record<BannerSize, BannerConfig> = {
+  "160x300": {
+    width: 160,
+    height: 300,
+    key: runtimeConfig.adsterraBanner160x300Key,
+    scriptUrl: runtimeConfig.adsterraBanner160x300ScriptUrl
+  },
+  "160x600": {
+    width: 160,
+    height: 600,
+    key: runtimeConfig.adsterraBanner160x600Key,
+    scriptUrl: runtimeConfig.adsterraBanner160x600ScriptUrl
+  },
   "300x250": {
     width: 300,
     height: 250,
@@ -25,10 +37,16 @@ const bannerConfigs: Record<BannerSize, BannerConfig> = {
     key: runtimeConfig.adsterraBanner320x50Key,
     scriptUrl: runtimeConfig.adsterraBanner320x50ScriptUrl
   },
+  "468x60": {
+    width: 468,
+    height: 60,
+    key: runtimeConfig.adsterraBanner468x60Key,
+    scriptUrl: runtimeConfig.adsterraBanner468x60ScriptUrl
+  },
   "728x90": {
     width: 728,
     height: 90,
-    key: runtimeConfig.adsterraBanner728x90Key || runtimeConfig.adsterraLeaderboardId,
+    key: runtimeConfig.adsterraBanner728x90Key,
     scriptUrl: runtimeConfig.adsterraBanner728x90ScriptUrl
   }
 };
@@ -76,9 +94,11 @@ function AdvertisementShell({
 
 function AdsterraBannerUnit({
   className = "",
+  label = "Advertisement",
   size
 }: {
   className?: string;
+  label?: string;
   size: BannerSize;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -112,7 +132,7 @@ function AdsterraBannerUnit({
   if (!scriptUrl || !config.key) return null;
 
   return (
-    <AdvertisementShell className={className}>
+    <AdvertisementShell className={className} label={label}>
       <div
         ref={hostRef}
         className="ad-host"
@@ -232,6 +252,23 @@ export function AdsterraLeaderboard() {
   return (
     <div className="ad-leaderboard">
       <AdsterraBannerUnit size={size} />
+    </div>
+  );
+}
+
+export function AdsterraBannerBySize({ size }: { size: BannerSize }) {
+  return <AdsterraBannerUnit size={size} />;
+}
+
+export function AdsterraBanner468x60() {
+  return <AdsterraBannerUnit size="468x60" />;
+}
+
+export function AdsterraStickyRail() {
+  if (!runtimeConfig.adsterraEnableStickyRail) return null;
+  return (
+    <div className="ad-rail-shell">
+      <AdsterraBannerUnit size="160x600" label="Sticky Rail" />
     </div>
   );
 }

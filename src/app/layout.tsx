@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import { AdsterraSmartLink } from "@/components/ads";
+import RouteAwareAdSlots from "@/components/ads/RouteAwareAdSlots";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { siteConfig } from "@/data/site";
@@ -12,6 +13,10 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const popunderScriptUrl = runtimeConfig.adsterraPopunderScriptUrl;
 const socialBarScriptUrl = runtimeConfig.adsterraSocialBarScriptUrl;
 const adsenseClientId = runtimeConfig.adsenseClientId;
+
+const socialBarDomainOnlyUrl = socialBarScriptUrl
+  ? socialBarScriptUrl.replace(/\/[0-9a-f]{2}\/[0-9a-f]{2}\/[0-9a-f]{2}\/[0-9a-f]+\.js$/, "")
+  : undefined;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
@@ -68,6 +73,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans`}>
+        <style>{`.ad-shell{min-height:90px}.ad-host{min-height:90px}`}</style>
         {adsenseClientId ? (
           <script
             id="google-adsense"
@@ -76,14 +82,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             crossOrigin="anonymous"
           />
         ) : null}
-        {popunderScriptUrl ? (
+        {runtimeConfig.adsterraEnablePopunder && popunderScriptUrl ? (
           <Script id="adsterra-popunder" src={popunderScriptUrl} strategy="afterInteractive" />
         ) : null}
-        {socialBarScriptUrl ? (
-          <Script id="adsterra-social-bar" src={socialBarScriptUrl} strategy="afterInteractive" />
+        {runtimeConfig.adsterraEnableSocialBar && socialBarDomainOnlyUrl ? (
+          <Script id="adsterra-social-bar" src={`${socialBarDomainOnlyUrl}/${siteConfig.domain}.js`} strategy="afterInteractive" />
         ) : null}
         <AdsterraSmartLink />
         <Navbar />
+        <RouteAwareAdSlots />
         {children}
         <Footer />
       </body>
