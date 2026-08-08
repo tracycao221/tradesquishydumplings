@@ -1,7 +1,43 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { runtimeConfig } from "@/lib/runtime-config";
+import { runtimeConfig as sourceRuntimeConfig } from "@/lib/runtime-config";
+
+export const ADSTERRA_RUNTIME_VERSION = "2026-07-27.2";
+
+// Static sites do not all declare every optional Adsterra field in their
+// environment-derived config type. The generated source can still provide
+// any subset at build time, so read it through a common optional contract.
+type AdsterraRuntimeConfig = {
+  adsterraBanner160x300Key?: string;
+  adsterraBanner160x300ScriptUrl?: string;
+  adsterraBanner160x600Key?: string;
+  adsterraBanner160x600ScriptUrl?: string;
+  adsterraBanner300x250Key?: string;
+  adsterraBanner300x250ScriptUrl?: string;
+  adsterraBanner320x50Key?: string;
+  adsterraBanner320x50ScriptUrl?: string;
+  adsterraBanner468x60Key?: string;
+  adsterraBanner468x60ScriptUrl?: string;
+  adsterraBanner728x90Key?: string;
+  adsterraBanner728x90ScriptUrl?: string;
+  adsterraEnablePopunder?: boolean;
+  adsterraEnableSocialBar?: boolean;
+  adsterraEnableStickyRail?: boolean;
+  adsterraLeaderboardId?: string;
+  adsterraNative1Id?: string;
+  adsterraNative1ScriptUrl?: string;
+  adsterraNative2Id?: string;
+  adsterraNative2ScriptUrl?: string;
+  adsterraPopunderDelayMs: number;
+  adsterraPopunderMinPageViews: number;
+  adsterraPopunderScriptUrl?: string;
+  adsterraSmartLinkUrl?: string;
+  adsterraSocialBarScriptUrl?: string;
+};
+
+const runtimeConfig = sourceRuntimeConfig as unknown as AdsterraRuntimeConfig;
 
 type BannerSize = "160x300" | "160x600" | "300x250" | "320x50" | "468x60" | "728x90";
 
@@ -13,18 +49,6 @@ type BannerConfig = {
 };
 
 const bannerConfigs: Record<BannerSize, BannerConfig> = {
-  "160x300": {
-    width: 160,
-    height: 300,
-    key: runtimeConfig.adsterraBanner160x300Key,
-    scriptUrl: runtimeConfig.adsterraBanner160x300ScriptUrl
-  },
-  "160x600": {
-    width: 160,
-    height: 600,
-    key: runtimeConfig.adsterraBanner160x600Key,
-    scriptUrl: runtimeConfig.adsterraBanner160x600ScriptUrl
-  },
   "300x250": {
     width: 300,
     height: 250,
@@ -37,19 +61,33 @@ const bannerConfigs: Record<BannerSize, BannerConfig> = {
     key: runtimeConfig.adsterraBanner320x50Key,
     scriptUrl: runtimeConfig.adsterraBanner320x50ScriptUrl
   },
+  "728x90": {
+    width: 728,
+    height: 90,
+    key: runtimeConfig.adsterraBanner728x90Key || runtimeConfig.adsterraLeaderboardId,
+    scriptUrl: runtimeConfig.adsterraBanner728x90ScriptUrl
+  },
   "468x60": {
     width: 468,
     height: 60,
     key: runtimeConfig.adsterraBanner468x60Key,
     scriptUrl: runtimeConfig.adsterraBanner468x60ScriptUrl
   },
-  "728x90": {
-    width: 728,
-    height: 90,
-    key: runtimeConfig.adsterraBanner728x90Key,
-    scriptUrl: runtimeConfig.adsterraBanner728x90ScriptUrl
+  "160x300": {
+    width: 160,
+    height: 300,
+    key: runtimeConfig.adsterraBanner160x300Key,
+    scriptUrl: runtimeConfig.adsterraBanner160x300ScriptUrl
+  },
+  "160x600": {
+    width: 160,
+    height: 600,
+    key: runtimeConfig.adsterraBanner160x600Key,
+    scriptUrl: runtimeConfig.adsterraBanner160x600ScriptUrl
   }
 };
+
+const CLEAN_AD_ROUTES = new Set(["/about", "/contact", "/disclosure", "/privacy", "/sources", "/terms"]);
 
 declare global {
   interface Window {
@@ -60,6 +98,8 @@ declare global {
       width: number;
       params: Record<string, unknown>;
     };
+    __adsterraBannerQueue?: Promise<void>;
+    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -73,6 +113,60 @@ function getBannerScriptUrl(config: BannerConfig) {
   if (config.scriptUrl) return normalizeScriptUrl(config.scriptUrl);
   if (!config.key) return undefined;
   return `https://www.highperformanceformat.com/${config.key}/invoke.js`;
+}
+
+function hasBannerSlot(size: BannerSize) {
+  const config = bannerConfigs[size];
+  return Boolean(getBannerScriptUrl(config) && config.key);
+}
+
+function hasLeaderboardSlot() {
+  return hasBannerSlot("728x90") || hasBannerSlot("320x50");
+}
+
+function hasNativeSlot(containerId?: string, scriptUrl?: string) {
+  return Boolean(containerId && normalizeScriptUrl(scriptUrl));
+}
+
+function isCleanAdRoute(pathname?: string | null) {
+  if (!pathname) return false;
+  const cleanPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  return CLEAN_AD_ROUTES.has(cleanPath);
+}
+
+function useCleanAdRoute() {
+  return isCleanAdRoute(usePathname());
+}
+
+function trackAdEvent(eventName: string, payload: Record<string, unknown>) {
+  window.gtag?.("event", eventName, {
+    event_category: "ads",
+    ad_network: "adsterra",
+    ...payload
+  });
+}
+
+function useAdVisibilityTracking(hostRef: React.RefObject<HTMLElement | null>, slotName: string) {
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry?.isIntersecting) return;
+        trackAdEvent("ad_slot_viewed", {
+          ad_slot: slotName,
+          visible_ratio: Math.round(entry.intersectionRatio * 100)
+        });
+        observer.disconnect();
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, [hostRef, slotName]);
 }
 
 function AdvertisementShell({
@@ -94,40 +188,78 @@ function AdvertisementShell({
 
 function AdsterraBannerUnit({
   className = "",
-  label = "Advertisement",
+  label,
+  slotName,
   size
 }: {
   className?: string;
   label?: string;
+  slotName?: string;
   size: BannerSize;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const config = bannerConfigs[size];
   const scriptUrl = getBannerScriptUrl(config);
+  const resolvedSlotName = slotName || `banner_${size}`;
+
+  useAdVisibilityTracking(hostRef, resolvedSlotName);
 
   useEffect(() => {
     const host = hostRef.current;
     if (!host || !scriptUrl || !config.key) return;
 
-    host.replaceChildren();
-    window.atOptions = {
-      key: config.key,
-      format: "iframe",
-      height: config.height,
-      width: config.width,
-      params: {}
-    };
+    let cancelled = false;
+    let emptyCheck: number | undefined;
 
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = scriptUrl;
-    script.async = false;
-    host.appendChild(script);
+    const queue = window.__adsterraBannerQueue || Promise.resolve();
+    window.__adsterraBannerQueue = queue.then(
+      () =>
+        new Promise<void>((resolve) => {
+          if (cancelled || !host.isConnected) {
+            resolve();
+            return;
+          }
+
+          trackAdEvent("ad_slot_mounted", { ad_slot: resolvedSlotName, ad_format: size });
+          host.replaceChildren();
+          window.atOptions = {
+            key: config.key,
+            format: "iframe",
+            height: config.height,
+            width: config.width,
+            params: {}
+          };
+
+          const script = document.createElement("script");
+          script.type = "text/javascript";
+          script.src = scriptUrl;
+          script.async = false;
+          script.onload = () => {
+            trackAdEvent("ad_script_loaded", { ad_slot: resolvedSlotName, ad_format: size });
+            resolve();
+          };
+          script.onerror = () => {
+            trackAdEvent("ad_script_error", { ad_slot: resolvedSlotName, ad_format: size });
+            resolve();
+          };
+          host.appendChild(script);
+
+          emptyCheck = window.setTimeout(() => {
+            const rendered = Boolean(host.querySelector("iframe, ins, a, img"));
+            trackAdEvent(rendered ? "ad_creative_rendered" : "ad_empty_after_5s", {
+              ad_slot: resolvedSlotName,
+              ad_format: size
+            });
+          }, 5000);
+        })
+    );
 
     return () => {
+      cancelled = true;
+      if (emptyCheck) window.clearTimeout(emptyCheck);
       host.replaceChildren();
     };
-  }, [config.height, config.key, config.width, scriptUrl]);
+  }, [config.height, config.key, config.width, resolvedSlotName, scriptUrl, size]);
 
   if (!scriptUrl || !config.key) return null;
 
@@ -148,17 +280,15 @@ function usePreferredLeaderboardSize() {
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
     const chooseSize = () => {
-      const desktopConfig = bannerConfigs["728x90"];
-      const mobileConfig = bannerConfigs["320x50"];
-      if (mediaQuery.matches && (desktopConfig.key || desktopConfig.scriptUrl)) {
+      if (mediaQuery.matches && hasBannerSlot("728x90")) {
         setSize("728x90");
         return;
       }
-      if (mobileConfig.key || mobileConfig.scriptUrl) {
+      if (hasBannerSlot("320x50")) {
         setSize("320x50");
         return;
       }
-      if (desktopConfig.key || desktopConfig.scriptUrl) {
+      if (hasBannerSlot("728x90")) {
         setSize("728x90");
         return;
       }
@@ -176,20 +306,25 @@ function usePreferredLeaderboardSize() {
 function AdsterraNativeUnit({
   className = "",
   containerId,
+  slotName = "native",
   scriptUrl
 }: {
   className?: string;
   containerId?: string;
+  slotName?: string;
   scriptUrl?: string;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const cleanContainerId = useMemo(() => containerId?.replace(/^#/, ""), [containerId]);
   const normalizedScriptUrl = normalizeScriptUrl(scriptUrl);
 
+  useAdVisibilityTracking(hostRef, slotName);
+
   useEffect(() => {
     const host = hostRef.current;
     if (!host || !cleanContainerId || !normalizedScriptUrl) return;
 
+    trackAdEvent("ad_slot_mounted", { ad_slot: slotName, ad_format: "native" });
     host.replaceChildren();
 
     const container = document.createElement("div");
@@ -200,12 +335,23 @@ function AdsterraNativeUnit({
     script.async = true;
     script.dataset.cfasync = "false";
     script.src = normalizedScriptUrl;
+    script.onload = () => trackAdEvent("ad_script_loaded", { ad_slot: slotName, ad_format: "native" });
+    script.onerror = () => trackAdEvent("ad_script_error", { ad_slot: slotName, ad_format: "native" });
     host.appendChild(script);
 
+    const emptyCheck = window.setTimeout(() => {
+      const rendered = Boolean(container.querySelector("iframe, ins, a, img"));
+      trackAdEvent(rendered ? "ad_creative_rendered" : "ad_empty_after_5s", {
+        ad_slot: slotName,
+        ad_format: "native"
+      });
+    }, 5000);
+
     return () => {
+      window.clearTimeout(emptyCheck);
       host.replaceChildren();
     };
-  }, [cleanContainerId, normalizedScriptUrl]);
+  }, [cleanContainerId, normalizedScriptUrl, slotName]);
 
   if (!cleanContainerId || !normalizedScriptUrl) return null;
 
@@ -218,6 +364,11 @@ function AdsterraNativeUnit({
 
 export function AdsterraSmartLink() {
   return null;
+}
+
+// Backward-compatible name used by first-generation site layouts.
+export function SponsoredSmartLink() {
+  return <AdsterraSmartLink />;
 }
 
 export function AdsterraSmartLinkAnchor({
@@ -242,7 +393,37 @@ export function AdsterraSmartLinkAnchor({
 }
 
 export function AdsterraBanner() {
-  return <AdsterraBannerUnit size="300x250" />;
+  return <AdsterraBannerUnit size="300x250" slotName="content_rectangle" />;
+}
+
+// Compatibility exports used by existing generated sites. Unsupported or
+// unconfigured sizes remain inert because AdsterraBannerUnit returns null.
+export function AdsterraBannerBySize({
+  className,
+  label,
+  size
+}: {
+  className?: string;
+  label?: string;
+  size: BannerSize;
+}) {
+  return <AdsterraBannerUnit className={className} label={label} slotName={`legacy_${size}`} size={size} />;
+}
+
+export function AdsterraBanner468x60() {
+  return <AdsterraBannerUnit slotName="legacy_banner_468x60" size="468x60" />;
+}
+
+export function AdsterraSkyscraper() {
+  return <AdsterraBannerUnit className="ad-shell-skyscraper" slotName="legacy_skyscraper_160x600" size="160x600" />;
+}
+
+export function AdsterraVerticalBanner() {
+  return <AdsterraBannerUnit className="ad-shell-vertical" slotName="legacy_vertical_160x300" size="160x300" />;
+}
+
+export function AdsterraRectangle() {
+  return <AdsterraBannerUnit size="300x250" slotName="bottom_rectangle" />;
 }
 
 export function AdsterraLeaderboard() {
@@ -251,24 +432,7 @@ export function AdsterraLeaderboard() {
 
   return (
     <div className="ad-leaderboard">
-      <AdsterraBannerUnit size={size} />
-    </div>
-  );
-}
-
-export function AdsterraBannerBySize({ size }: { size: BannerSize }) {
-  return <AdsterraBannerUnit size={size} />;
-}
-
-export function AdsterraBanner468x60() {
-  return <AdsterraBannerUnit size="468x60" />;
-}
-
-export function AdsterraStickyRail() {
-  if (!runtimeConfig.adsterraEnableStickyRail) return null;
-  return (
-    <div className="ad-rail-shell">
-      <AdsterraBannerUnit size="160x600" label="Sticky Rail" />
+      <AdsterraBannerUnit size={size} slotName={size === "728x90" ? "top_leaderboard" : "mobile_leaderboard"} />
     </div>
   );
 }
@@ -277,6 +441,7 @@ export function AdsterraNative1() {
   return (
     <AdsterraNativeUnit
       containerId={runtimeConfig.adsterraNative1Id}
+      slotName="native_inline"
       scriptUrl={runtimeConfig.adsterraNative1ScriptUrl}
     />
   );
@@ -286,8 +451,151 @@ export function AdsterraNative2() {
   return (
     <AdsterraNativeUnit
       containerId={runtimeConfig.adsterraNative2Id}
+      slotName="native_inline_2"
       scriptUrl={runtimeConfig.adsterraNative2ScriptUrl}
     />
+  );
+}
+
+export function AdsterraArticleTop() {
+  if (!hasLeaderboardSlot()) return null;
+
+  return (
+    <div className="ad-placement ad-placement-top">
+      <AdsterraLeaderboard />
+    </div>
+  );
+}
+
+export function AdsterraArticleMid() {
+  if (!hasNativeSlot(runtimeConfig.adsterraNative1Id, runtimeConfig.adsterraNative1ScriptUrl)) return null;
+
+  return (
+    <div className="ad-placement ad-placement-mid">
+      <AdsterraNative1 />
+    </div>
+  );
+}
+
+export function AdsterraArticleBottom() {
+  if (!hasBannerSlot("300x250")) return null;
+
+  return (
+    <div className="ad-placement ad-placement-bottom">
+      <AdsterraRectangle />
+    </div>
+  );
+}
+
+export function AdsterraToolAd() {
+  if (!hasLeaderboardSlot()) return null;
+
+  return (
+    <div className="ad-placement ad-placement-tool">
+      <AdsterraLeaderboard />
+    </div>
+  );
+}
+
+export function AdsterraToolBottom() {
+  if (!hasBannerSlot("300x250")) return null;
+
+  return (
+    <div className="ad-placement ad-placement-tool-bottom">
+      <AdsterraRectangle />
+    </div>
+  );
+}
+
+/**
+ * A conservative portfolio fallback for legacy sites whose page templates
+ * have little or no inline inventory. It is wired only by the migration
+ * tool when source coverage is below the threshold, and remains clean-route
+ * aware even though it lives in the root layout.
+ */
+export function AdsterraGlobalFallback() {
+  const cleanAdRoute = useCleanAdRoute();
+  if (cleanAdRoute || !hasLeaderboardSlot()) return null;
+
+  return (
+    <div className="ad-placement ad-placement-global-fallback">
+      <AdsterraLeaderboard />
+    </div>
+  );
+}
+
+// Backward-compatible placement API used by older generated page templates.
+export function AdSlot({ label }: { label: string }) {
+  if (label === "native1") return <AdsterraNative1 />;
+  if (label === "leaderboard") return <AdsterraLeaderboard />;
+  return <AdsterraRectangle />;
+}
+
+export function AdsterraPopunderGate() {
+  const cleanAdRoute = useCleanAdRoute();
+
+  useEffect(() => {
+    if (cleanAdRoute) return;
+    if (!runtimeConfig.adsterraEnablePopunder || !runtimeConfig.adsterraPopunderScriptUrl) return;
+
+    const pageViewsKey = "roblox-site-adsterra-pageviews";
+    const loadedKey = "roblox-site-adsterra-popunder-loaded";
+    const nextPageViews = Number(window.sessionStorage.getItem(pageViewsKey) || "0") + 1;
+    window.sessionStorage.setItem(pageViewsKey, String(nextPageViews));
+
+    if (window.sessionStorage.getItem(loadedKey)) return;
+    if (nextPageViews < runtimeConfig.adsterraPopunderMinPageViews) return;
+
+    const timer = window.setTimeout(() => {
+      if (document.getElementById("adsterra-popunder")) return;
+      const script = document.createElement("script");
+      script.id = "adsterra-popunder";
+      script.src = normalizeScriptUrl(runtimeConfig.adsterraPopunderScriptUrl) || "";
+      script.async = true;
+      script.onload = () => trackAdEvent("ad_script_loaded", { ad_slot: "popunder_gate", ad_format: "popunder" });
+      script.onerror = () => trackAdEvent("ad_script_error", { ad_slot: "popunder_gate", ad_format: "popunder" });
+      document.body.appendChild(script);
+      window.sessionStorage.setItem(loadedKey, "true");
+    }, runtimeConfig.adsterraPopunderDelayMs);
+
+    return () => window.clearTimeout(timer);
+  }, [cleanAdRoute]);
+
+  return null;
+}
+
+export function AdsterraSocialBarGate() {
+  const cleanAdRoute = useCleanAdRoute();
+
+  useEffect(() => {
+    if (cleanAdRoute) return;
+    if (!runtimeConfig.adsterraEnableSocialBar || !runtimeConfig.adsterraSocialBarScriptUrl) return;
+    if (document.getElementById("adsterra-social-bar")) return;
+
+    const script = document.createElement("script");
+    script.id = "adsterra-social-bar";
+    script.async = true;
+    script.dataset.cfasync = "false";
+    script.src = normalizeScriptUrl(runtimeConfig.adsterraSocialBarScriptUrl) || "";
+    script.onload = () => trackAdEvent("ad_script_loaded", { ad_slot: "social_bar", ad_format: "social_bar" });
+    script.onerror = () => trackAdEvent("ad_script_error", { ad_slot: "social_bar", ad_format: "social_bar" });
+    document.body.appendChild(script);
+  }, [cleanAdRoute]);
+
+  return null;
+}
+
+export function AdsterraStickyRail() {
+  const cleanAdRoute = useCleanAdRoute();
+  const railConfig = bannerConfigs["160x600"];
+  if (cleanAdRoute || !runtimeConfig.adsterraEnableStickyRail || !railConfig.key || !getBannerScriptUrl(railConfig)) {
+    return null;
+  }
+
+  return (
+    <div className="ad-sticky-rail">
+      <AdsterraBannerUnit size="160x600" slotName="desktop_rail_160x600" />
+    </div>
   );
 }
 

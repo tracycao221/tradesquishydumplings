@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
-import { AdsterraSmartLink } from "@/components/ads";
+import { AdsterraSmartLink, AdsterraPopunderGate, AdsterraSocialBarGate, AdsterraStickyRail, AdsterraGlobalFallback } from "@/components/ads";
 import RouteAwareAdSlots from "@/components/ads/RouteAwareAdSlots";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -10,13 +9,7 @@ import { runtimeConfig } from "@/lib/runtime-config";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const popunderScriptUrl = runtimeConfig.adsterraPopunderScriptUrl;
-const socialBarScriptUrl = runtimeConfig.adsterraSocialBarScriptUrl;
 const adsenseClientId = runtimeConfig.adsenseClientId;
-
-const socialBarDomainOnlyUrl = socialBarScriptUrl
-  ? socialBarScriptUrl.replace(/\/[0-9a-f]{2}\/[0-9a-f]{2}\/[0-9a-f]{2}\/[0-9a-f]+\.js$/, "")
-  : undefined;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
@@ -82,16 +75,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             crossOrigin="anonymous"
           />
         ) : null}
-        {runtimeConfig.adsterraEnablePopunder && popunderScriptUrl ? (
-          <Script id="adsterra-popunder" src={popunderScriptUrl} strategy="afterInteractive" />
-        ) : null}
-        {runtimeConfig.adsterraEnableSocialBar && socialBarDomainOnlyUrl ? (
-          <Script id="adsterra-social-bar" src={`${socialBarDomainOnlyUrl}/${siteConfig.domain}.js`} strategy="afterInteractive" />
-        ) : null}
+        <AdsterraPopunderGate />
+        <AdsterraSocialBarGate />
         <AdsterraSmartLink />
         <Navbar />
+        <AdsterraGlobalFallback />
         <RouteAwareAdSlots />
         {children}
+        <AdsterraStickyRail />
         <Footer />
       </body>
     </html>

@@ -1,3 +1,5 @@
+import { adsterraStaticConfig } from "@/lib/adsterra.generated";
+
 function readEnv(value: string | undefined): string | undefined {
   return value && value.trim().length > 0 ? value : undefined;
 }
@@ -7,7 +9,7 @@ const defaultAdsterraPopunderScriptUrl =
 const defaultAdsterraSocialBarScriptUrl =
   "https://pl30200621.effectivecpmnetwork.com/22/f5/f8/22f5f8005db83c2dffb1fe3e65115224.js";
 
-export const runtimeConfig = {
+const runtimeEnvConfig = {
   adsenseClientId: readEnv(process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID),
   adsterraBanner300x250Key: readEnv(process.env.NEXT_PUBLIC_ADSTERRA_BANNER_300X250_KEY),
   adsterraBanner300x250ScriptUrl: readEnv(process.env.NEXT_PUBLIC_ADSTERRA_BANNER_300X250_SCRIPT_URL),
@@ -34,4 +36,9 @@ export const runtimeConfig = {
   adsterraEnableSocialBar: readEnv(process.env.NEXT_PUBLIC_ADSTERRA_ENABLE_SOCIAL_BAR) === "true",
   adsterraEnableStickyRail: readEnv(process.env.NEXT_PUBLIC_ADSTERRA_ENABLE_STICKY_RAIL) === "true",
   analyticsId: readEnv(process.env.NEXT_PUBLIC_ANALYTICS_ID)
+};
+
+export const runtimeConfig = {
+  ...runtimeEnvConfig,
+  ...adsterraStaticConfig
 };
